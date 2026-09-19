@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import math
 
 # ============================================================
 # SETTINGS
@@ -98,6 +99,12 @@ axis_points = np.float32([
 
 
 # ============================================================
+# 2D vector to store angle values
+# ============================================================
+
+angles = np.zeros((3,3))
+
+# ============================================================
 # OPEN CAMERA
 # ============================================================
 
@@ -143,14 +150,26 @@ while True:
     # Detect chessboard
     # --------------------------------------------------------
 
-    found, corners = cv2.findChessboardCorners(
-        gray,
-        chessboard_size,
-        flags=(
-            cv2.CALIB_CB_ADAPTIVE_THRESH
-            + cv2.CALIB_CB_NORMALIZE_IMAGE
+    # found, corners = cv2.findChessboardCorners(
+    #     gray,
+    #     chessboard_size,
+    #     flags=(
+    #         cv2.CALIB_CB_ADAPTIVE_THRESH
+    #         + cv2.CALIB_CB_NORMALIZE_IMAGE
+    #     )
+    # )
+
+    # using normal find corners, the board may not be detectable if two external corner pts of the same corner block isn't visible
+
+    found, corners = cv2.findChessboardCornersSB(
+            gray,
+            chessboard_size,
+            flags=(
+                cv2.CALIB_CB_LARGER
+                + cv2.CALIB_CB_NORMALIZE_IMAGE
+                + cv2.CALIB_CB_ACCURACY
+            )
         )
-    )
 
     if found:
 
@@ -259,6 +278,35 @@ while True:
             )
 
             # ------------------------------------------------
+            # Rcamera=R^(-1)=R.T
+            # Rcam=[xc, yc, zc], xc=>direction of camera's right axis, yc=>down axis, zc=>forward axis
+            # ------------------------------------------------
+
+            Rcam = R.T
+
+            roll=np.degrees(np.arctan2(Rcam[2,1], Rcam[2,2]))
+            pitch=np.degrees(np.arcsin((-1)*Rcam[2,0]))
+            yaw=np.degrees(np.arctan2(Rcam[1,0], Rcam[0,0]))
+
+            camroll=yaw
+            campitch=roll
+            camyaw=pitch
+
+            angles = np.arccos(Rcam)
+
+            # key1 = cv2.waitKey(1) & 0xFF
+            # if key1==ord("f"):
+                # print(f"\nx: {Rcam[:,0]}")
+                # print(f"y: {Rcam[:,1]}")
+                # print(f"z: {Rcam[:,2]}\n")
+
+                # print(np.matrix(Rcam))
+
+                # print(f"\n{np.degrees(angles)}\n")
+                # print(f"roll:{camroll}    pitch:{campitch}    yaw:{camyaw}\n")
+
+
+            # ------------------------------------------------
             # Display position
             # ------------------------------------------------
 
@@ -310,7 +358,10 @@ while True:
                 f"\rCamera position: "
                 f"X={x:8.2f}, "
                 f"Y={y:8.2f}, "
-                f"Z={z:8.2f}",
+                f"Z={z:8.2f}"
+                f"      roll:{camroll:.2f}, "
+                f"pitch:{campitch:.2f}, "
+                f"yaw:{camyaw:.2f}",
                 end=""
             )
 

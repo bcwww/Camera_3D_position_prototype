@@ -1,0 +1,24 @@
+Completed:
+    1. Camera calibration
+    2. Basic position estimation
+    3. Test different flags for findChessBoardCornersSB
+
+
+Currently doing:
+    1. Testing & looking for problems/limitations in position estimation
+    2. Camera orientation estimation (angles between camera and world coordinates seem ok, now translate into roll pitch yaw)
+
+Problems:
+    1. Can't detect board if two external corners of a corner block is not visible (Can kinda be solved with findChessBoardCornersSB)
+    2. May have problems if the lighting isn't consistent across the board!
+    3. Some angles captures all internal points but can't see board
+    4. Reflecting may affect board detection
+    5. The portion of the board in the entire image might affect capturing the board(too small may cause issue)
+
+Todo:
+    1. Use ChArUco board
+
+
+SB, flag=larger+normalize: error around 1cm per 5cm of movement
+SB, flag=larger+normalize+accuracy: sometimes error smaller than 1cm over 15cm of movement
+However, we don't have enough equipment to do accurate tests for movement error in a fair environment, so don't worry abt that now
