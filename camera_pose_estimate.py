@@ -351,6 +351,40 @@ while True:
             )
 
             # ------------------------------------------------
+            # Display orientation
+            # ------------------------------------------------
+
+            cv2.putText(
+                frame,
+                f"Roll: {camroll:.1f}",
+                (1120, 40),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.8,
+                (255, 255, 255),
+                2
+            )
+
+            cv2.putText(
+                frame,
+                f"Pitch: {campitch:.1f}",
+                (1120, 75),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.8,
+                (255, 255, 255),
+                2
+            )
+
+            cv2.putText(
+                frame,
+                f"Yaw: {camyaw:.1f}",
+                (1120, 110),
+                cv2.FONT_HERSHEY_SIMPLEX,
+                0.8,
+                (255, 255, 255),
+                2
+            )
+
+            # ------------------------------------------------
             # Terminal output
             # ------------------------------------------------
 
@@ -359,9 +393,9 @@ while True:
                 f"X={x:8.2f}, "
                 f"Y={y:8.2f}, "
                 f"Z={z:8.2f}"
-                f"      roll:{camroll:.2f}, "
-                f"pitch:{campitch:.2f}, "
-                f"yaw:{camyaw:.2f}",
+                f"      roll:{camroll:.0f}, "
+                f"pitch:{campitch:.0f}, "
+                f"yaw:{camyaw:.0f}",
                 end=""
             )
 
