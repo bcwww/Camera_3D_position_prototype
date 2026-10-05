@@ -7,7 +7,7 @@ import math
 # ============================================================
 
 CALIBRATION_FILE = "camera_calibration.npz"
-CAMERA_INDEX = 0
+CAMERA_INDEX = 1
 
 # Length of the coordinate axes drawn on the board.
 # This uses the SAME unit as SQUARE_SIZE.

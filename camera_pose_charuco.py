@@ -91,7 +91,7 @@ else:
     #
     # Example:
     # 0.025 means 25 mm if using meters.
-    square_length = 0.025
+    square_length = 20 #0.025
 
 
 # ChArUco uses number of squares rather than number
@@ -258,6 +258,34 @@ while True:
         marker_ids
 
     ) = charuco_detector.detectBoard(frame)
+
+
+# --------------------------------------------------------
+# Normalize ChArUco output format for OpenCV
+# --------------------------------------------------------
+
+    if charuco_corners is not None and charuco_ids is not None:
+
+        charuco_corners = np.asarray(
+            charuco_corners,
+            dtype=np.float32
+        ).reshape(-1, 1, 2)
+
+        charuco_ids = np.asarray(
+            charuco_ids,
+            dtype=np.int32
+        ).reshape(-1, 1)
+
+    if charuco_corners is not None:
+        print(
+            "corners:",
+            charuco_corners.shape,
+            charuco_corners.dtype,
+            "| ids:",
+            charuco_ids.shape if charuco_ids is not None else None,
+            charuco_ids.dtype if charuco_ids is not None else None
+        )
+
 
     # ========================================================
     # DRAW DETECTED ARUCO MARKERS
