@@ -372,7 +372,7 @@ while True:
                         image_points,
                         camera_matrix,
                         dist_coeffs,
-                        flags=cv2.SOLVEPNP_ITERATIVE
+                        flags=cv2.SOLVEPNP_IPPE# cv2.SOLVEPNP_ITERATIVE
                     )
                 )
 
@@ -408,6 +408,22 @@ while True:
                     x = camera_position[0, 0]
                     y = camera_position[1, 0]
                     z = camera_position[2, 0]
+
+
+                    # ------------------------------------------------
+                    # Rcamera=R^(-1)=R.T
+                    # Rcam=[xc, yc, zc], xc=>direction of camera's right axis, yc=>down axis, zc=>forward axis
+                    # ------------------------------------------------
+        
+                    Rcam = R.T
+        
+                    roll=np.degrees(np.arctan2(Rcam[2,1], Rcam[2,2]))
+                    pitch=np.degrees(np.arcsin((-1)*Rcam[2,0]))
+                    yaw=np.degrees(np.arctan2(Rcam[1,0], Rcam[0,0]))
+        
+                    camroll=yaw
+                    campitch=roll
+                    camyaw=pitch
 
                     # ========================================
                     # DRAW BOARD COORDINATE AXES
@@ -452,6 +468,40 @@ while True:
                         cv2.FONT_HERSHEY_SIMPLEX,
                         0.8,
                         (255, 0, 0),
+                        2
+                    )
+
+                    # ------------------------------------------------
+                    # Display orientation
+                    # ------------------------------------------------
+        
+                    cv2.putText(
+                        frame,
+                        f"Roll: {camroll:.1f}",
+                        (1120, 40),
+                        cv2.FONT_HERSHEY_SIMPLEX,
+                        0.8,
+                        (255, 255, 255),
+                        2
+                    )
+        
+                    cv2.putText(
+                        frame,
+                        f"Pitch: {campitch:.1f}",
+                        (1120, 75),
+                        cv2.FONT_HERSHEY_SIMPLEX,
+                        0.8,
+                        (255, 255, 255),
+                        2
+                    )
+        
+                    cv2.putText(
+                        frame,
+                        f"Yaw: {camyaw:.1f}",
+                        (1120, 110),
+                        cv2.FONT_HERSHEY_SIMPLEX,
+                        0.8,
+                        (255, 255, 255),
                         2
                     )
 
